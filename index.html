@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Official 16.11 Mission • Live Countdown ✨</title>
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --cyan: #06b6d4;
+      --indigo: #6366f1;
+      --pink: #ec4899;
+      --purple: #a855f7;
+      --gold: #f59e0b;
+      --text: #f9fafb;
+      --text-sub: #9ca3af;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 10%, #1e1145, var(--bg) 90%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 30px 16px;
+    }
+
+    /* Ambient Side Neon Glows */
+    .side-glow-left {
+      position: fixed;
+      left: -180px;
+      top: 25%;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.22), transparent 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 1;
+      animation: pulseGlow 6s ease-in-out infinite alternate;
+    }
+
+    .side-glow-right {
+      position: fixed;
+      right: -180px;
+      bottom: 20%;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.22), transparent 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 1;
+      animation: pulseGlow 6s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1) translateY(0); opacity: 0.6; }
+      100% { transform: scale(1.15) translateY(-25px); opacity: 0.9; }
+    }
+
+    #cosmicCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      max-width: 920px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .top-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 24px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(6, 182, 212, 0.45);
+      border-radius: 50px;
+      color: var(--cyan);
+      font-size: 0.86rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
+      animation: floatTag 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatTag {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-6px); }
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 5.8vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 10%, #06b6d4 45%, #ec4899 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .subtext {
+      font-size: clamp(0.96rem, 2.3vw, 1.15rem);
+      color: var(--text-sub);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    /* 5-Box Grid with Distinct Colors */
+    .timer-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      width: 100%;
+      max-width: 860px;
+      margin: 8px 0;
+    }
+
+    .timer-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 22px 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.55);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .timer-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.7);
+    }
+
+    .timer-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+
+    /* Distinct Colors */
+    .card-days { border-color: rgba(6, 182, 212, 0.4); }
+    .card-days::after { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+    .card-days .time-num { color: #ffffff; text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+    .card-days .time-unit { color: var(--cyan); }
+
+    .card-hours { border-color: rgba(99, 102, 241, 0.4); }
+    .card-hours::after { background: linear-gradient(90deg, transparent, var(--indigo), transparent); }
+    .card-hours .time-num { color: #ffffff; text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+    .card-hours .time-unit { color: var(--indigo); }
+
+    .card-mins { border-color: rgba(168, 85, 247, 0.4); }
+    .card-mins::after { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+    .card-mins .time-num { color: #ffffff; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+    .card-mins .time-unit { color: var(--purple); }
+
+    .card-secs { border-color: rgba(245, 158, 11, 0.4); }
+    .card-secs::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .card-secs .time-num { color: #ffffff; text-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+    .card-secs .time-unit { color: var(--gold); }
+
+    .card-ms { border-color: rgba(236, 72, 153, 0.45); }
+    .card-ms::after { background: linear-gradient(90deg, transparent, var(--pink), transparent); }
+    .card-ms .time-num { color: var(--pink); text-shadow: 0 0 22px rgba(236, 72, 153, 0.6); }
+    .card-ms .time-unit { color: var(--pink); }
+
+    .time-num {
+      font-size: clamp(2rem, 5.2vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .time-unit {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      font-weight: 700;
+    }
+
+    .mystery-box {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 22px;
+      padding: 24px 30px;
+      width: 100%;
+      max-width: 720px;
+      text-align: left;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .mystery-header {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .mystery-content {
+      color: #cbd5e1;
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+
+    .badge-highlight {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #06b6d4, #6366f1);
+      color: #fff;
+      border: none;
+      box-shadow: 0 10px 25px rgba(6, 182, 212, 0.35);
+    }
+
+    .btn-main:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-3px);
+    }
+
+    .floating-symbol {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.35;
+      font-size: 1.8rem;
+      animation: floatCosmos linear infinite;
+    }
+
+    @keyframes floatCosmos {
+      0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.55; }
+      80% { opacity: 0.55; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    #cluePopup {
+      position: fixed;
+      bottom: 28px;
+      background: rgba(17, 24, 39, 0.96);
+      border: 1px solid var(--cyan);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(6, 182, 212, 0.25);
+      color: #fff;
+      padding: 14px 26px;
+      border-radius: 50px;
+      font-size: 0.94rem;
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      max-width: 90vw;
+    }
+
+    #cluePopup.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .timer-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .timer-card {
+        padding: 16px 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .timer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .timer-card:last-child {
+        grid-column: span 2;
+      }
+      .mystery-box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="side-glow-left"></div>
+  <div class="side-glow-right"></div>
+
+  <canvas id="cosmicCanvas"></canvas>
+
+  <div class="floating-symbol" style="left: 8%; animation-duration: 9s; animation-delay: 0s;">✨</div>
+  <div class="floating-symbol" style="left: 24%; animation-duration: 13s; animation-delay: 2s;">⏳</div>
+  <div class="floating-symbol" style="left: 65%; animation-duration: 10s; animation-delay: 1s;">🎂</div>
+  <div class="floating-symbol" style="left: 84%; animation-duration: 12s; animation-delay: 3s;">🍕</div>
+  <div class="floating-symbol" style="left: 92%; animation-duration: 11s; animation-delay: 2s;">🚗</div>
+
+  <div class="wrapper">
+    
+    <div class="top-pill">
+      <span>✦ Mission 16.11 • The Official Live Countdown ✦</span>
+    </div>
+
+    <h1>Countdown To<br>Shatakshi Ji's Day! 🎂✨</h1>
+
+    <p class="subtext">
+      Diwali safai, college lectures aur Python grind ke beech... har ek second aur millisecond 16 November ki taraf tez raftaar se badh raha hai!
+    </p>
+
+    <div class="timer-grid">
+      <div class="timer-card card-days">
+        <div class="time-num" id="days">00</div>
+        <div class="time-unit">Days</div>
+      </div>
+      <div class="timer-card card-hours">
+        <div class="time-num" id="hours">00</div>
+        <div class="time-unit">Hours</div>
+      </div>
+      <div class="timer-card card-mins">
+        <div class="time-num" id="minutes">00</div>
+        <div class="time-unit">Minutes</div>
+      </div>
+      <div class="timer-card card-secs">
+        <div class="time-num" id="seconds">00</div>
+        <div class="time-unit">Seconds</div>
+      </div>
+      <div class="timer-card card-ms">
+        <div class="time-num" id="millis">000</div>
+        <div class="time-unit">Millisec</div>
+      </div>
+    </div>
+
+    <div class="mystery-box">
+      <div class="mystery-header">
+        <span>🔒 Status: Top Secret Surprise in Progress</span>
+      </div>
+      <p class="mystery-content">
+        Ye countdown zero hote hi ek khas digital surprise unlock hoga. Tab tak ke liye reminder: <span class="badge-highlight">Birthday Treat Officially Pending Hai! 🍕😎</span> 
+        Aur haan, chahe jitna bhi pooch lijiye, surprise ka code 16 November subah hi unlock hoga!
+      </p>
+    </div>
+
+    <div class="button-group">
+      <button class="btn btn-main" id="btnClue">
+        <span>🔍 Demand a Clue</span>
+      </button>
+      <button class="btn btn-outline" id="btnSparks">
+        <span>✨ Send Advance Vibe</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div id="cluePopup">🔒 Clue: "Mercedes SUV, midnight view aur number plate 'Shatakshi 16.11'..." 😉🚗</div>
+
+  <script>
+    const targetDate = new Date("November 16, 2026 00:00:00").getTime();
+
+    const dEl = document.getElementById("days");
+    const hEl = document.getElementById("hours");
+    const mEl = document.getElementById("minutes");
+    const sEl = document.getElementById("seconds");
+    const msEl = document.getElementById("millis");
+
+    function updateLiveCountdown() {
+      const now = Date.now();
+      const difference = targetDate - now;
+
+      if (difference <= 0) {
+        dEl.innerText = "00";
+        hEl.innerText = "00";
+        mEl.innerText = "00";
+        sEl.innerText = "00";
+        msEl.innerText = "000";
+        return;
+      }
+
+      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((difference % (1000 * 60)) / 1000);
+      const ms = Math.floor(difference % 1000);
+
+      dEl.innerText = d < 10 ? "0" + d : d;
+      hEl.innerText = h < 10 ? "0" + h : h;
+      mEl.innerText = m < 10 ? "0" + m : m;
+      sEl.innerText = s < 10 ? "0" + s : s;
+      
+      if (ms < 10) {
+        msEl.innerText = "00" + ms;
+      } else if (ms < 100) {
+        msEl.innerText = "0" + ms;
+      } else {
+        msEl.innerText = ms;
+      }
+
+      requestAnimationFrame(updateLiveCountdown);
+    }
+
+    requestAnimationFrame(updateLiveCountdown);
+
+    const canvas = document.getElementById('cosmicCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const colors = ['#06b6d4', '#6366f1', '#ec4899', '#f59e0b', '#ffffff'];
+
+    class Particle {
+      constructor(x, y, isBurst = false) {
+        this.x = x || Math.random() * width;
+        this.y = y || Math.random() * height;
+        this.radius = isBurst ? Math.random() * 3.5 + 1.5 : Math.random() * 1.8 + 0.8;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.vx = isBurst ? (Math.random() - 0.5) * 10 : (Math.random() - 0.5) * 0.5;
+        this.vy = isBurst ? (Math.random() - 0.5) * 10 - 2 : -(Math.random() * 0.6 + 0.2);
+        this.alpha = 1;
+        this.decay = isBurst ? Math.random() * 0.02 + 0.015 : 0;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.decay > 0) this.alpha -= this.decay;
+
+        if (this.decay === 0 && this.y < -10) {
+          this.y = height + 10;
+          this.x = Math.random() * width;
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 65; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        p.draw();
+        if (p.alpha <= 0) particles.splice(i, 1);
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    const clueBtn = document.getElementById('btnClue');
+    const toast = document.getElementById('cluePopup');
+    const clues = [
+      '🔒 Clue 1: " midnight view aur number plate \'Shatakshi 16.11\'..." 🚗✨',
+      '🔒 Clue 2: "Gaadi ke boot me kuch chamakta hua surprise hai!" 😉🎂',
+      '🔒 Clue 3: "Virtual cake cutting ceremony me knife ready hai!" 🍰',
+      '🔒 Clue 4: "15 din pehle shuru hua legendary countdown sach ho raha hai!" ⏳'
+    ];
+    let clueIndex = 0;
+
+    clueBtn.addEventListener('click', () => {
+      toast.innerText = clues[clueIndex % clues.length];
+      clueIndex++;
+      toast.classList.add('active');
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3500);
+    });
+
+    const sparksBtn = document.getElementById('btnSparks');
+    sparksBtn.addEventListener('click', () => {
+      const rect = sparksBtn.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 95; i++) {
+        particles.push(new Particle(originX, originY, true));
+      }
+    });
+  </script>
+</body>
+</html>
